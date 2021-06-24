@@ -468,33 +468,11 @@
       }
     }
 
-    const toBase64 = (str) => {
-      try { return btoa(encodeURIComponent(str)) }
-      catch { return '' }
-    }
-    const fromBase64 = (base64) => {
-      try { return decodeURIComponent(atob(base64)) }
-      catch { return '' }
-    }
-
     const createCustomEvent = (type, detail) => {
       return new CustomEvent(type, {
         detail: (detail || {})
       })
     }
-
-    const tdlog = (base64) => {
-      const log = fromBase64(base64)
-      if (!log) return false
-      return document.dispatchEvent(
-        createCustomEvent('mdlog', {
-          log: log,
-          base64: base64
-        })
-      )
-    }
-
-    const mdlog = tdlog
 
     const lang = (strOrObj) => {
       const data = ((data) => {
@@ -552,31 +530,29 @@
       const mdButton = getTargetByAttr('data-md-button')
       const mdClear = getTargetByAttr('data-md-clear')
       if (mdId) {
-        const isAccordion = mdId.dataset.mdId.startsWith('accordion_')
-        if (isAccordion) {
+        if (mdId.dataset.mdId.startsWith('accordion_')) {
           accordion(mdId.dataset.mdId)
-        }
-        if (!isAccordion) {
+        } else {
           console.log(mdId.dataset.mdId)
         }
       }
       if (mdButton) {
         const dataset = mdButton.dataset.mdButton
-        const type = dataset.split('_').reverse()[0]
-        const isCSS = (type === 'css')
-        const isDebug = (type === 'debug')
+        const isCSS = (dataset.split('_').reverse()[0] === 'css')
         const textarea = document.querySelector(`textarea[data-md-textarea=${dataset}]`)
-        // if (isDebug) {
-        //   new Function(`"use strict";return(${textarea.value});`)()
-        // }
-        if (!isDebug) {
+        if (dataset.split('_').reverse()[0] === 'debug') {
+          new Function(`"use strict";return(${textarea.value});`)()
+        } else {
           const value = (textarea && textarea.value) || ''
           const contents = (() => {
-            if (!isCSS) return value
-            const replacedValue = [...value.replace(/\r?\s/g, '')]
-            .map((str) => (str === '`' || str === '\\') ? `\\${str}` : str)
-            .join('')
-            return `!(c=>{const s=document.createElement("style");s.textContent=c,document.documentElement.insertAdjacentElement("beforeend",s)})(\`${replacedValue}\`);`
+            if (isCSS) {
+              const replacedValue = [...value.replace(/\r?\s/g, '')]
+                .map((str) => (str === '`' || str === '\\') ? `\\${str}` : str)
+                .join('')
+              return `!(c=>{const s=document.createElement("style");s.textContent=c,document.documentElement.insertAdjacentElement("beforeend",s)})(\`${replacedValue}\`);`
+            } else {
+              return value
+            }
           })()
           console.log(`mdcustomjs:${contents}`)
         }
@@ -588,13 +564,6 @@
         panel(mdPanel.dataset.mdPanel)
       }
     }, options)
-
-    document.addEventListener('mdlog', (e) => {
-      const log = (e.detail || {}).log
-      const textarea = document.querySelector('textarea[data-md-textarea=accordion_debug]')
-      if (!log || !textarea) return false
-      textarea.value += `${log}\n`
-    })
 
     document.addEventListener('mdlang', (e) => {
       const detail = e.detail
@@ -621,13 +590,13 @@
         elem.classList.remove('open')
       })
       const open = [
-        document.querySelector(`.listTextarea[data-md-textarea=${id}]`),
-        document.querySelector(`.listItem[data-md-id=${id}`)
-      ]
-      open.filter((elem) => elem)
-      .map((elem) => {
-        elem.classList.toggle('open')
-      })
+          document.querySelector(`.listTextarea[data-md-textarea=${id}]`),
+          document.querySelector(`.listItem[data-md-id=${id}`)
+        ]
+        .filter((elem) => elem)
+        .map((elem) => {
+          elem.classList.toggle('open')
+        })
     }, options)
 
     document.addEventListener('mdpanel', (e) => {
@@ -773,7 +742,6 @@
         <li class="listItem" data-md-id="td_settings" data-md-icon="tune">TD settings</li>
         <li class="listItem" data-md-id="app_settings" data-md-icon="settings">App settings</li>
         <li class="listItem" data-md-id="account" data-md-icon="account_circle">Account</li>
-        <li class="listItem" data-md-id="add_account" data-md-icon="person_add_alt_1">Add account</li>
         <li class="listItem" data-md-id="help" data-md-icon="help">Help</li>
       </ul>
     </div>
@@ -799,7 +767,7 @@
         <li class="listItem" data-md-id="accordion_debug" data-md-icon="bug_report">Debug</li>
         <li class="listTextarea" data-md-textarea="accordion_debug">
           <div class="listTextareaContainer">
-            <textarea data-md-textarea="accordion_debug" readonly></textarea>
+            <textarea data-md-textarea="accordion_debug"></textarea>
             <div class="listTextareaButton" data-md-button="accordion_debug">Run</div>
             <div class="listTextareaClear" data-md-clear="accordion_debug" data-md-icon="clear"></div>
           </div>
