@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="en" data-sidebar="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+  <title>sidebar</title>
+
+  <style>
+    html {
+      --default-color: #616171;
+      --default-bg-color: #ffffff;
+      --default-category-bg-color: #00000018;
+      --default-icon-color: #616171;
+      --default-category-icon-color: #616171;
+      --default-category-highlight-color: #ffffff;
+      --default-ripple-color: currentColor;
+      --default-divider-color: #e0e0e0;
+      --default-divider-width: 1px;
+      --default-textarea-bg-color: #00000018;
+      --default-textarea-border-color: #00000024;
+      --default-header-image: url(https://hisubway.online/transfer/marindeck/header.png);
+      --default-header-icon: url(https://hisubway.online/img/marindeck.png);
+    }
+
+    html.dark {
+      --default-color: #ffffff;
+      --default-bg-color: #1c2938;
+      --default-category-bg-color: #00000018;
+      --default-icon-color: #8899a6;
+      --default-category-icon-color: #8899a6;
+      --default-category-highlight-color: #1c2938;
+      --default-ripple-color: currentColor;
+      --default-divider-color: #38444d;
+      --default-textarea-bg-color: #00000018;
+      --default-textarea-border-color: #00000024;
+      --default-header-image: url(https://hisubway.online/transfer/marindeck/header.png);
+      --default-header-icon: url(https://hisubway.online/img/marindeck.png);
+    }
+
+    @font-face {
+      font-family: "Material Icons";
+      font-style: normal;
+      font-weight: 400;
+      src: url(https://fonts.gstatic.com/s/materialicons/v88/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format("woff2");
+    }
+
+    *,
+    ::before,
+    ::after {
+      user-select: none;
+      box-sizing: border-box;
+      font-weight: 500;
+    }
+
+    body {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      grid-template-columns: 48px 1fr;
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      font-size: 12px;
+      background-color: var(--bg-color, var(--default-bg-color));
+      color: var(--color, var(--default-color));
+      overflow: hidden;
+    }
+
+    #header {
+      position: relative;
+      grid-column: 1 / 3;
+      background-image: var(--header-image, var(--default-header-image));
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    #header::before {
+      content: "";
+      display: block;
+      padding-top: 56.25%;
+      padding-top: clamp(20vh, 56.25%, 35vh);
+      pointer-events: none;
+    }
+
+    #headerInner {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: grid;
+      align-items: center;
+      grid-column: 1;
+      grid-template: 100% / 70px 1fr;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    #headerIcon {
+      background-image: var(--header-icon, var(--default-header-icon));
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 70px;
+      height: 70px;
+      border-radius: 9999px;
+    }
+
+    #category {
+      position: relative;
+      background-color: var(--category-bg-color, var(--default-category-bg-color));
+    }
+
+    #categoryHighlight {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 48px;
+      height: 48px;
+      background-color: var(--category-highlight-color, var(--bg-color, var(--default-category-highlight-color)));
+    }
+
+    .categorySection {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .categoryItem {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      color: var(--category-icon-color, var(--icon-color, var(--default-category-icon-color)));
+      font-size: 24px;
+      line-height: 48px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    #list {
+      overflow: scroll;
+      scroll-snap-type: y mandatory;
+    }
+
+    #list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .listContainer {
+      position: relative;
+      height: 100%;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      overflow: hidden;
+    }
+
+    .listDivider {
+      width: 100%;
+      height: var(--divider-width, var(--default-divider-width));
+      margin: 0;
+      overflow: hidden;
+      border: 0;
+      background-color: var(--divider-color, var(--default-divider-color));
+      pointer-events: none;
+    }
+
+    .listSection {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .listItem {
+      position: relative;
+      padding-left: 62px;
+      height: 48px;
+      line-height: 46px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .listItem::before {
+      position: absolute;
+      left: 16px;
+      display: inline-block;
+      width: 20px;
+      height: 48px;
+      font-size: 20px;
+      line-height: 48px;
+      letter-spacing: normal;
+      text-transform: none;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      color: var(--icon-color, var(--default-icon-color));
+      pointer-events: none;
+    }
+
+    .listItem[data-md-id^=accordion_]::after {
+      content: "expand_more";
+      display: inline-block;
+      font-family: "Material Icons";
+      position: absolute;
+      right: 16px;
+      display: inline-block;
+      width: 20px;
+      height: 48px;
+      font-size: 20px;
+      line-height: 48px;
+      letter-spacing: normal;
+      text-transform: none;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      color: var(--icon-color, var(--default-icon-color));
+      pointer-events: none;
+      transition: transform .3s
+    }
+
+    .listItem[data-md-id^="accordion_"].open::after {
+      transform: rotate(0.5turn);
+    }
+
+    .listTextarea {
+      width: 100%;
+      height: 0;
+      transition: height .3s;
+      overflow: hidden;
+    }
+
+    .listTextarea.open {
+      height: 200px;
+    }
+
+    .listTextarea .listTextareaContainer {
+      width: calc(100% - 12px);
+      height: calc(100% - 12px);
+      margin: 6px;
+      background-color: var(--textarea-bg-color, var(--default-textarea-bg-color));
+      border: 1px solid var(--textarea-border-color, var(--default-textarea-border-color));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .listTextarea textarea {
+      width: 100%;
+      padding: 2px;
+      height: calc(100% - 34px);
+      margin: 0;
+      color: var(--color, var(--default-color));
+      background-color: transparent;
+      border: 0;
+      resize: none;
+      outline: 0;
+      overflow-y: scroll;
+    }
+
+    .listTextarea .listTextareaButton {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      text-align: center;
+      line-height: 32px;
+      width: calc(100% - 32px);
+      height: 32px;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--textarea-border-color, var(--default-textarea-border-color));
+      overflow: hidden;
+    }
+
+    .listTextarea .listTextareaClear {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      text-align: center;
+      font-size: 20px;
+      line-height: 32px;
+      width: 32px;
+      height: 32px;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--textarea-border-color, var(--default-textarea-border-color));
+      border-left: 1px solid var(--textarea-border-color, var(--default-textarea-border-color));
+      overflow: hidden;
+    }
+
+    [data-md-icon]::before {
+      content: attr(data-md-icon);
+      display: inline-block;
+      font-family: "Material Icons";
+    }
+
+    .rippleJS {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: block;
+      overflow: hidden;
+      border-radius: inherit;
+    }
+
+    .rippleJS .ripple {
+      position: absolute;
+      border-radius: 100%;
+      background: var(--ripple-color, var(--default-ripple-color));
+      opacity: 0.2;
+      width: 0;
+      height: 0;
+      transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+      transform: scale(0);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .rippleJS .ripple.held {
+      opacity: 0.4;
+      transform: scale(1);
+    }
+
+    .rippleJS .ripple.done {
+      opacity: 0;
+    }
+
+    .rippleJS .ripple:not(.done) {
+      will-change: transform, opacity;
+    }
+
+    .relative {
+      position: relative;
+    }
+
+    body[data-md-nav-pos=right] {
+      grid-template-columns: 1fr 48px;
+    }
+
+    body[data-md-nav-pos=right] #category,
+    body[data-md-nav-pos=bottom] #category {
+      order: 2;
+    }
+
+    body[data-md-nav-pos=right] #list,
+    body[data-md-nav-pos=bottom] #list {
+      order: 1;
+    }
+
+    body[data-md-nav-pos=top] {
+      grid-template-rows: auto 48px 1fr;
+      grid-template-columns: 100%;
+    }
+
+    body[data-md-nav-pos=bottom] {
+      grid-template-rows: auto 1fr 48px;
+      grid-template-columns: 100%;
+    }
+
+    body[data-md-nav-pos=top] #header,
+    body[data-md-nav-pos=bottom] #header {
+      grid-column: 1;
+    }
+
+    body[data-md-nav-pos=top] .categorySection,
+    body[data-md-nav-pos=bottom] .categorySection {
+      display: flex;
+    }
+
+    body[data-md-nav-pos=top] #list,
+    body[data-md-nav-pos=bottom] #list {
+      display: flex;
+      flex-wrap: nowrap;
+      scroll-snap-type: x mandatory;
+    }
+
+    body[data-md-nav-pos=top] .listContainer,
+    body[data-md-nav-pos=bottom] .listContainer {
+      min-width: 100%;
+    }
+
+    body[data-md-nav-pos=top] .listDivider,
+    body[data-md-nav-pos=bottom] .listDivider {
+      display: none;
+    }
+  </style>
+
+  <script>
+    const defaultMenu = {}
+    const options = {
+      capture: false,
+      once: false,
+      passive: true
+    }
+
+    const setBackgroundImage = (elem, url) => {
+      if (!elem) return
+      elem.style.backgroundImage = `url(${url})`
+    }
+
+    const loadHeaderImg = (headerUrl) => {
+      return setBackgroundImage(
+        document.getElementById('header'),
+        headerUrl
+      )
+    }
+    const loadIconImg = (iconUrl) => {
+      return setBackgroundImage(
+        document.getElementById('headerIcon'),
+        iconUrl
+      )
+    }
+
+    const darkTheme = (boolean) => {
+      const root = document.documentElement
+      root.classList[boolean ? 'add' : 'remove']('dark')
+    }
+
+    const navPosition = (pos) => {
+      document.body.dataset.mdNavPos = pos;
+    }
+
+    const setup = () => {
+      const listItems = [...document.querySelectorAll('.listItem')]
+      listItems.map((elem) => {
+        const text = elem.textContent
+        const span = elem.getElementsByTagName('span')[0]
+        const mdId = elem.dataset.mdId
+        if (mdId) {
+          defaultMenu[mdId] = text
+        }
+        if (span) {
+          span.textContent = text
+          return
+        }
+        const newSpan = document.createElement('span')
+        newSpan.textContent = text
+        elem.textContent = ''
+        elem.insertAdjacentElement('afterbegin', newSpan)
+      })
+
+      const rippleParents = [
+        document.getElementById('headerIcon'),
+        ...document.querySelectorAll('.listItem'),
+        ...document.querySelectorAll('.categoryItem'),
+        ...document.querySelectorAll('.listTextareaButton'),
+        ...document.querySelectorAll('.listTextareaClear')
+      ]
+      rippleParents.map((elem) => {
+        elem.classList.add('relative')
+        const rippleJS = document.createElement('div')
+        rippleJS.classList.add('rippleJS')
+        elem.insertAdjacentElement('beforeend', rippleJS)
+      })
+
+      const list = document.getElementById('list')
+      const highlight = document.getElementById('categoryHighlight')
+      if (list && highlight) {
+        list.addEventListener('scroll', (e) => window.requestAnimationFrame(() => {
+          const listHeight = list.scrollHeight
+          const listWidth = list.scrollWidth
+          const positionT = Math.round((list.scrollTop / (listHeight / 4)) * 100 / 100 * 48)
+          const positionL = Math.round((list.scrollLeft / (listWidth / 4)) * 100 / 100 * 48)
+          highlight.style.top = `${positionT}px`
+          highlight.style.left = `${positionL}px`
+        }), options)
+      }
+    }
+
+    const toBase64 = (str) => {
+      try { return btoa(encodeURIComponent(str)) }
+      catch { return '' }
+    }
+    const fromBase64 = (base64) => {
+      try { return decodeURIComponent(atob(base64)) }
+      catch { return '' }
+    }
+
+    const createCustomEvent = (type, detail) => {
+      return new CustomEvent(type, {
+        detail: (detail || {})
+      })
+    }
+
+    const tdlog = (base64) => {
+      const log = fromBase64(base64)
+      if (!log) return false
+      return document.dispatchEvent(
+        createCustomEvent('mdlog', {
+          log: log,
+          base64: base64
+        })
+      )
+    }
+
+    const mdlog = tdlog
+
+    const lang = (strOrObj) => {
+      const data = ((data) => {
+        if (typeof d === 'string') {
+          try {
+            return Object.parse(d)
+          } catch {
+            return {}
+          }
+        }
+        return data
+      })(strOrObj) || {}
+      const menu = data.menu || {}
+      return document.dispatchEvent(
+        createCustomEvent('mdlang', {
+          data: data,
+          menu: menu
+        })
+      )
+    }
+
+    const loadLang = lang
+
+    const panel = (n) => {
+      const index = (Number(n) - 1)
+      if (Number.isInteger(index) && index >= 0) {
+        return document.dispatchEvent(
+          createCustomEvent('mdpanel', {
+            index: index
+          })
+        )
+      }
+      return false
+    }
+
+    const accordion = (id) => {
+      return document.dispatchEvent(
+        createCustomEvent('mdaccordion', {
+          id: id
+        })
+      )
+    }
+
+    document.addEventListener('click', (e) => {
+      const target = e.target
+      if (!target) return
+      const getTargetByAttr = (attr) => {
+        if (typeof attr !== 'string') return null
+        const attrValue = ('getAttribute' in target) ? (target.getAttribute(attr)) : null
+        //? null and undefined ((attrValue === null) || (attrValue === undefined))
+        return (attrValue == null) ? target.closest(`[${attr}]`) : target
+      }
+      const mdId = getTargetByAttr('data-md-id')
+      const mdPanel = getTargetByAttr('data-md-panel')
+      const mdButton = getTargetByAttr('data-md-button')
+      const mdClear = getTargetByAttr('data-md-clear')
+      if (mdId) {
+        const isAccordion = mdId.dataset.mdId.startsWith('accordion_')
+        if (isAccordion) {
+          accordion(mdId.dataset.mdId)
+        }
+        if (!isAccordion) {
+          console.log(mdId.dataset.mdId)
+        }
+      }
+      if (mdButton) {
+        const dataset = mdButton.dataset.mdButton
+        const type = dataset.split('_').reverse()[0]
+        const isCSS = (type === 'css')
+        const isDebug = (type === 'debug')
+        const textarea = document.querySelector(`textarea[data-md-textarea=${dataset}]`)
+        // if (isDebug) {
+        //   new Function(`"use strict";return(${textarea.value});`)()
+        // }
+        if (!isDebug) {
+          const value = (textarea && textarea.value) || ''
+          const contents = (() => {
+            if (!isCSS) return value
+            const replacedValue = [...value.replace(/\r?\s/g, '')]
+            .map((str) => (str === '`' || str === '\\') ? `\\${str}` : str)
+            .join('')
+            return `!(c=>{const s=document.createElement("style");s.textContent=c,document.documentElement.insertAdjacentElement("beforeend",s)})(\`${replacedValue}\`);`
+          })()
+          console.log(`mdcustomjs:${contents}`)
+        }
+      }
+      if (mdClear) {
+        document.querySelector(`textarea[data-md-textarea=${mdClear.dataset.mdClear}]`).value = ""
+      }
+      if (mdPanel) {
+        panel(mdPanel.dataset.mdPanel)
+      }
+    }, options)
+
+    document.addEventListener('mdlog', (e) => {
+      const log = (e.detail || {}).log
+      const textarea = document.querySelector('textarea[data-md-textarea=accordion_debug]')
+      if (!log || !textarea) return false
+      textarea.value += `${log}\n`
+    })
+
+    document.addEventListener('mdlang', (e) => {
+      const detail = e.detail
+      if (!detail) return false
+      const data = detail.data
+      const menu = detail.menu
+      if (!data || !menu) return false
+      const listItems = [...document.querySelectorAll('.listItem')]
+      listItems.map((elem) => {
+        const span = elem.getElementsByTagName('span')[0]
+        if (!span) return
+        span.textContent = menu[elem.dataset.mdId] || defaultMenu[elem.dataset.mdId]
+      })
+    }, options)
+
+    document.addEventListener('mdaccordion', (e) => {
+      const id = (e.detail || {}).id
+      if (!id) return false
+      const opened = [
+        ...document.querySelectorAll(`.listTextarea[data-md-textarea]:not([data-md-textarea=${id}])`),
+        ...document.querySelectorAll(`.listItem[data-md-id^=accordion_]:not([data-md-id=${id}])`)
+      ]
+      opened.map((elem) => {
+        elem.classList.remove('open')
+      })
+      const open = [
+        document.querySelector(`.listTextarea[data-md-textarea=${id}]`),
+        document.querySelector(`.listItem[data-md-id=${id}`)
+      ]
+      open.filter((elem) => elem)
+      .map((elem) => {
+        elem.classList.toggle('open')
+      })
+    }, options)
+
+    document.addEventListener('mdpanel', (e) => {
+      const index = (e.detail || {}).index
+      const element = document.querySelectorAll('.listContainer')[index]
+      if (!element) return false
+      element.scrollIntoView({
+        behavior: 'smooth'
+      })
+    }, options)
+
+    document.addEventListener('DOMContentLoaded', setup, {
+      ...options,
+      once: true
+    })
+
+    const startRipple = (type, event) => {
+      const target = event.target
+      if (!target) return
+
+      const container = (() => {
+        if (target.classList.contains('rippleJS')) {
+          return target
+        }
+        return [...target.childNodes, target.closest('.rippleJS')].filter((elem) => {
+          if (!elem) return
+          const cl = elem.classList
+          if (cl && cl.contains('rippleJS')) {
+            return elem
+          }
+        })[0] || null
+      })()
+
+      if (!container) return
+
+      const prev = container.getAttribute('data-event')
+      if (prev && prev !== type) return
+
+      container.setAttribute('data-event', type)
+
+      const rect = container.getBoundingClientRect()
+
+      const [x, y] = ((offsetX, offsetY, clientX, clientY) => {
+        if (offsetX !== undefined) {
+          return [offsetX, offsetY]
+        }
+        return [clientX - rect.left, clientY - rect.top]
+      })(event.offsetX, event.offsetY, event.clientX, event.clientY)
+
+      const max = ((rectWidth, rectHeight) => {
+        if (rectWidth === rectHeight) {
+          return rectWidth * 1.412
+        }
+        return Math.sqrt(rectWidth * rectWidth + rectHeight * rectHeight)
+      })(rect.width, rect.height)
+
+      const dim = `${max * 2}px`
+
+      const ripple = document.createElement('div')
+      ripple.classList.add('ripple')
+      ripple.style.width = dim
+      ripple.style.height = dim
+      ripple.style.marginLeft = `${-max + x}px`
+      ripple.style.marginTop = `${-max + y}px`
+      container.insertAdjacentElement('beforeend', ripple)
+      window.setTimeout(() => {
+        ripple.classList.add('held')
+      }, 0)
+
+      const releaseEventTypes = ['mouseup', 'dragstart', 'touchend', 'touchcancel', 'mdcancel', 'touchmove']
+      const releaseEventOptions = {
+        ...options,
+        once: true
+      }
+      const releaseEventListener = (e) => {
+        releaseEventCancel()
+        ripple.classList.add('done')
+        window.setTimeout(() => {
+          ripple.remove()
+          if (!container.children.length) {
+            container.classList.remove('active')
+            container.removeAttribute('data-event')
+          }
+        }, 650)
+      }
+      const releaseEventCancel = () => {
+        releaseEventTypes.map((releaseEventType) => {
+          document.removeEventListener(releaseEventType, releaseEventListener, releaseEventOptions)
+        })
+      }
+      releaseEventTypes.map((releaseEventType) => {
+        document.addEventListener(releaseEventType, releaseEventListener, releaseEventOptions)
+      })
+    }
+
+    document.addEventListener('mousedown', (e) => {
+      if (e.button === 0) {
+        startRipple(e.type, e)
+      }
+    }, options)
+    document.addEventListener('touchstart', (e) => {
+      const changedTouches = [...e.changedTouches]
+      changedTouches.map((t) => {
+        startRipple(e.type, t)
+      })
+    }, options)
+  </script>
+
+</head>
+
+<body>
+  <header id="header">
+    <div id="headerInner">
+      <div id="headerIcon"></div>
+      <div id="headerText"></div>
+    </div>
+  </header>
+  <nav id="category">
+    <div id="categoryHighlight"></div>
+    <ul class="categorySection">
+      <li class="categoryItem" data-md-panel="1" data-md-icon="play_arrow"></li>
+      <li class="categoryItem" data-md-panel="2" data-md-icon="widgets"></li>
+      <li class="categoryItem" data-md-panel="3" data-md-icon="developer_mode"></li>
+      <li class="categoryItem" data-md-panel="4" data-md-icon="cancel"></li>
+    </ul>
+  </nav>
+  <main id="list">
+    <div class="listContainer">
+      <ul class="listSection">
+        <li class="listItem" data-md-id="tweet" data-md-icon="mode">Tweet</li>
+        <li class="listItem" data-md-id="tweet_via_twitter" data-md-icon="border_color">Tweet via Twitter</li>
+        <li class="listItem" data-md-id="reload" data-md-icon="autorenew">Reload</li>
+        <li class="listItem" data-md-id="add_column" data-md-icon="playlist_add">Add column</li>
+        <li class="listItem" data-md-id="search" data-md-icon="search">Search</li>
+        <!--
+        <li class="listItem" data-md-id="eternal_force_blizzard" data-md-icon="air">Eternal force blizzard</li>
+        -->
+      </ul>
+    </div>
+    <hr class="listDivider">
+    <div class="listContainer">
+      <ul class="listSection">
+        <li class="listItem" data-md-id="td_settings" data-md-icon="tune">TD settings</li>
+        <li class="listItem" data-md-id="app_settings" data-md-icon="settings">App settings</li>
+        <li class="listItem" data-md-id="account" data-md-icon="account_circle">Account</li>
+        <li class="listItem" data-md-id="add_account" data-md-icon="person_add_alt_1">Add account</li>
+        <li class="listItem" data-md-id="help" data-md-icon="help">Help</li>
+      </ul>
+    </div>
+    <hr class="listDivider">
+    <div class="listContainer">
+      <ul class="listSection">
+        <li class="listItem" data-md-id="accordion_run_js" data-md-icon="code">Run JavaScript</li>
+        <li class="listTextarea" data-md-textarea="accordion_run_js">
+          <div class="listTextareaContainer">
+            <textarea data-md-textarea="accordion_run_js"></textarea>
+            <div class="listTextareaButton" data-md-button="accordion_run_js">Run</div>
+            <div class="listTextareaClear" data-md-clear="accordion_run_js" data-md-icon="clear"></div>
+          </div>
+        </li>
+        <li class="listItem" data-md-id="accordion_apply_css" data-md-icon="style">Apply CSS</li>
+        <li class="listTextarea" data-md-textarea="accordion_apply_css">
+          <div class="listTextareaContainer">
+            <textarea id="accordion_apply_css" data-md-textarea="accordion_apply_css"></textarea>
+            <div class="listTextareaButton" data-md-button="accordion_apply_css">Apply</div>
+            <div class="listTextareaClear" data-md-clear="accordion_apply_css" data-md-icon="clear"></div>
+          </div>
+        </li>
+        <li class="listItem" data-md-id="accordion_debug" data-md-icon="bug_report">Debug</li>
+        <li class="listTextarea" data-md-textarea="accordion_debug">
+          <div class="listTextareaContainer">
+            <textarea data-md-textarea="accordion_debug" readonly></textarea>
+            <div class="listTextareaButton" data-md-button="accordion_debug">Run</div>
+            <div class="listTextareaClear" data-md-clear="accordion_debug" data-md-icon="clear"></div>
+          </div>
+        </li>
+        <li class="listItem" data-md-id="qr_code" data-md-icon="qr_code">QR code</li>
+      </ul>
+    </div>
+    <hr class="listDivider">
+    <div class="listContainer">
+      <ul class="listSection">
+        <li class="listItem" data-md-id="log_out" data-md-icon="person_remove">Log out</li>
+        <li class="listItem" data-md-id="exit" data-md-icon="exit_to_app">Exit</li>
+      </ul>
+    </div>
+  </main>
+  <style id="customStyle"></style>
+</body>
+
+</html>
