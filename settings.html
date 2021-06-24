@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+      integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        -webkit-tap-highlight-color: transparent !important;
+      }
+
+      /*HiStyle*/
+      :root {
+        --hs-color: #242452;
+        --hs-bg-color: #ffffff;
+        --hs-bg-color-o: #ffffffe0;
+        --hs-bg-color2: #ebebef;
+        --hs-pri-color: #41adef;
+        --hs-shadow: #a0a6b8;
+      }
+
+      :root.hs-dark {
+        --hs-color: #eeeef7;
+        --hs-bg-color: #212121;
+        --hs-bg-color-o: #212121e0;
+        --hs-bg-color2: #3a3a40;
+        --hs-shadow: #16181d;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-width: 320px;
+        color: var(--hs-color);
+        background-color: var(--hs-bg-color);
+        font-family: "Jost", sans-serif;
+        font-size: 16px;
+        user-select: none;
+        overflow-x: hidden;
+        scrollbar-width: 0;
+      }
+
+      ::-webkit-scrollbar {
+        display: none;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 32px;
+      }
+
+      h1 > a {
+        text-decoration: underline;
+        text-decoration-thickness: 3px;
+      }
+
+      h2 {
+        text-align: center;
+        font-size: 24px;
+      }
+
+      h2 > a {
+        text-decoration: underline;
+        text-decoration-thickness: 3px;
+      }
+
+      h3 {
+        width: 100%;
+        background-color: var(--hs-bg-color2);
+        height: 32px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        text-align: center;
+        line-height: 32px;
+        font-size: 16px;
+      }
+
+      h4 {
+        color: var(--hs-pri-color);
+        margin: 16px 0 0 0;
+        font-size: 16px;
+        line-height: 16px;
+      }
+
+      h5 {
+        font-size: 16px;
+      }
+
+      h6 {
+        font-size: 8px;
+      }
+
+      .hs-fixednav {
+        display: -ms-grid;
+        display: grid;
+        -ms-grid-columns: 50px 1fr 50px;
+        grid-template-columns: 50px 1fr 50px;
+        width: 100vw;
+        height: 50px;
+        position: fixed;
+        top: 0;
+        -webkit-transition: top 0.3s;
+        transition: top 0.3s;
+        left: 0;
+        z-index: 100;
+        -webkit-box-shadow: 0 0 20px 0 var(--hs-shadow);
+        box-shadow: 0 0 20px 0 var(--hs-shadow);
+        -webkit-backdrop-filter: blur(6.5px);
+        backdrop-filter: blur(6.5px);
+        color: var(--hs-pri-color);
+      }
+
+      @supports not (
+        (-webkit-backdrop-filter: blur(6.5px)) or (backdrop-filter: blur(6.5px))
+      ) {
+        .hs-fixednav {
+          background-color: var(--hs-bg-color-o);
+        }
+      }
+
+      .hs-fixednav .hs-title {
+        height: 50px;
+        font-size: 25px;
+        font-weight: 600;
+        line-height: 50px;
+        -webkit-filter: drop-shadow(0 0 20px var(--hs-shadow));
+        filter: drop-shadow(0 0 20px var(--hs-shadow));
+        text-align: center;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      .hs-fixednav .hs-nav-button {
+        width: 50px;
+        height: 50px;
+        font-family: "Material Icons";
+        font-size: 24px;
+        text-align: center;
+        line-height: 50px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: pointer;
+      }
+
+      .hs-fixednav + * {
+        padding-top: 72px;
+      }
+
+      .hs-ctr {
+        display: block;
+        width: 87%;
+        max-width: 1024px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      /*MarinDeck設定専用*/
+      label {
+        font-size: 16px;
+        color: var(--hs-color);
+      }
+
+      span.lever {
+        float: right;
+      }
+
+      .md-number,
+      .md-item {
+        min-height: 42px;
+      }
+
+      .md-switch-text {
+        display: block;
+        width: calc(100% - 52px);
+        min-height: 42px;
+        line-height: 42px;
+        float: left;
+      }
+
+      .switch {
+        width: 52px;
+        min-height: 42px;
+        float: right;
+      }
+
+      .switch label .lever {
+        margin-top: 14px;
+        margin-bottom: 14px;
+        margin-left: 0;
+        background-color: var(--hs-bg-color2) !important;
+      }
+
+      .switch label .lever:before {
+        background-color: transparent !important;
+      }
+
+      .switch label input[type="checkbox"]:checked + .lever:after {
+        background-color: var(--hs-pri-color);
+      }
+
+      .select-wrapper {
+        display: block;
+        width: 180px;
+        height: 42px;
+        float: right;
+      }
+
+      .select-wrapper input.select-dropdown {
+        color: var(--hs-pri-color);
+        border: 0 !important;
+        margin: 0;
+      }
+
+      .select-wrapper .caret {
+        fill: var(--hs-pri-color);
+      }
+
+      .md-select {
+        width: 100%;
+        min-height: 42px;
+      }
+
+      .md-select-text {
+        display: block;
+        width: calc(100% - 180px);
+        min-height: 42px;
+        line-height: 42px;
+        float: left;
+      }
+
+      .dropdown-content {
+        background-color: var(--hs-bg-color);
+      }
+
+      .dropdown-content li > a,
+      .dropdown-content li > span {
+        color: var(--hs-color);
+      }
+
+      .md-number-text {
+        display: block;
+        width: calc(100% - 55px);
+        min-height: 42px;
+        line-height: 42px;
+        float: left;
+      }
+
+      input[type="number"] {
+        display: block;
+        width: 55px !important;
+        float: right;
+        text-align: center;
+        border: 0 !important;
+        color: var(--hs-color);
+        background-color: var(--hs-bg-color2) !important;
+        box-shadow: none !important;
+      }
+
+      .md-item-left {
+        display: block;
+        width: calc(100% - 120px);
+        min-height: 42px;
+        line-height: 42px;
+        float: left;
+      }
+
+      .md-item-right {
+        display: block;
+        width: 120px;
+        min-height: 42px;
+        line-height: 42px;
+        float: right;
+        text-align: right;
+      }
+
+      .md-item-right * {
+        width: 100% !important;
+      }
+
+      button,
+      .hs-button,
+      .hs-button-pri,
+      button.hs-button-pri,
+      input.hs-button-pri[type="button"],
+      input.hs-button-pri[type="submit"],
+      input.hs-button-pri[type="reset"],
+      input[type="button"],
+      input[type="submit"],
+      input[type="reset"] {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        min-width: 6rem;
+        height: 36px;
+        -webkit-box-shadow: 0 0 3px 0 var(--hs-shadow);
+        box-shadow: 0 0 3px 0 var(--hs-shadow);
+        border-radius: 5px;
+        text-align: center;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        outline: none;
+        border: none;
+        color: var(--hs-pri-color);
+        background-color: var(--hs-bg-color) !important;
+      }
+
+      .hs-button-pri,
+      button.hs-button-pri,
+      input.hs-button-pri[type="button"],
+      input.hs-button-pri[type="submit"],
+      input.hs-button-pri[type="reset"] {
+        color: var(--hs-bg-color);
+        background-color: var(--hs-pri-color) !important;
+      }
+
+      .materialize-textarea {
+        background-color: var(--hs-bg-color) !important;
+        box-shadow: none !important;
+        border: 1px solid #7f7f7f !important;
+        min-height: 1rem !important;
+        padding: 0.8rem 0.5rem !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="hs-fixednav">
+      <div
+        class="hs-nav-button waves-effect waves-dark"
+        onclick="closescreen()"
+      >
+        arrow_back
+      </div>
+      <div class="hs-title">Settings</div>
+      <div class="hs-nav-button waves-effect waves-dark">more_vert</div>
+    </div>
+    <div class="hs-ctr">
+      <h3 class="waves-effect waves-dark">基本設定</h3>
+      <div class="md-select">
+        <span class="md-select-text">ツイート画面</span>
+        <select class="mdjs-select" data-settingid="Tweet-window">
+          <option value="0">TweetDeck</option>
+          <option value="1">Twitter</option>
+          <option value="2">Twitter Web App</option>
+        </select>
+      </div>
+
+      <span class="md-switch-text">範囲選択を無効</span>
+      <div class="switch">
+        <label>
+          <input
+            type="checkbox"
+            class="mdjs-switch"
+            data-settingid="Disable-range-selection"
+          />
+          <span class="lever"></span>
+        </label>
+      </div>
+
+      <span class="md-switch-text">ダークモードを強制</span>
+      <div class="switch">
+        <label>
+          <input
+            type="checkbox"
+            class="mdjs-switch"
+            data-settingid="Force-dark-mode"
+          />
+          <span class="lever"></span>
+        </label>
+      </div>
+
+      <span class="md-switch-text">完全な黒を使用</span>
+      <div class="switch">
+        <label>
+          <input
+            type="checkbox"
+            class="mdjs-switch"
+            data-settingid="Use-pure-black"
+          />
+          <span class="lever"></span>
+        </label>
+      </div>
+
+      <span class="md-switch-text">TweetDeckを日本語化</span>
+      <div class="switch">
+        <label>
+          <input
+            type="checkbox"
+            class="mdjs-switch"
+            data-settingid="Japanese-localization"
+          />
+          <span class="lever"></span>
+        </label>
+      </div>
+
+      <span class="md-switch-text">ロングタップで画像保存</span>
+      <div class="switch">
+        <label>
+          <input
+            type="checkbox"
+            class="mdjs-switch"
+            data-settingid="Save-images-with-long-press"
+          />
+          <span class="lever"></span>
+        </label>
+      </div>
+
+      <h3 class="waves-effect waves-dark">Submarin</h3>
+      <p>
+        端末にSubmarinがインストールされているため、入力したカラムにSubmarinのメッセージが表示されます。「0」を入力すると非表示になります。
+      </p>
+
+      <div class="md-number">
+        <span class="md-number-text">Submarinを表示するカラム</span>
+        <input
+          type="number"
+          data-settingid="Column-to-display-Submarin"
+          min="0"
+          max="99"
+          step="1"
+          value="0"
+        />
+      </div>
+
+      <h3 class="waves-effect waves-dark">アプリ</h3>
+      <span class="md-switch-text">起動時にアップデートを確認</span>
+      <div class="switch">
+        <label>
+          <input
+            type="checkbox"
+            class="mdjs-switch"
+            data-settingid="Check-for-updates-when-the-app-launch"
+          />
+          <span class="lever"></span>
+        </label>
+      </div>
+
+      <span class="md-switch-text">画面を消灯しない</span>
+      <div class="switch">
+        <label>
+          <input
+            type="checkbox"
+            class="mdjs-switch"
+            data-settingid="Keep-screen-on"
+          />
+          <span class="lever"></span>
+        </label>
+      </div>
+
+      <span class="md-switch-text">戻るキーで終了</span>
+      <div class="switch">
+        <label>
+          <input
+            type="checkbox"
+            class="mdjs-switch"
+            data-settingid="Tap-back-key-to-exit"
+          />
+          <span class="lever"></span>
+        </label>
+      </div>
+
+      <h3 class="waves-effect waves-dark">カスタマイズ</h3>
+      <div class="md-item">
+        <span class="md-item-left">詳細設定</span>
+        <div class="md-item-right">
+          <button class="waves-effect waves-dark" style="padding: 0">
+            開く
+          </button>
+        </div>
+      </div>
+
+      <div class="md-item">
+        <span class="md-item-left">カスタムJavascript</span>
+        <div class="md-item-right">
+          <button class="waves-effect waves-dark" style="padding: 0">
+            開く
+          </button>
+        </div>
+      </div>
+
+      <div class="md-item">
+        <span class="md-item-left">カスタムCSS</span>
+        <div class="md-item-right">
+          <button class="waves-effect waves-dark" style="padding: 0">
+            開く
+          </button>
+        </div>
+      </div>
+
+      <!--
+    <p>入力したJavascriptがページのロード後に実行されます。</p>
+
+    <textarea class="materialize-textarea" data-settingid="custom-js" data-set="manual"
+      placeholder="Javascriptを入力"></textarea>
+
+    <button class="hs-button waves-effect waves-dark" style="width: 100%;" onclick="manualset('custom-js')">保存</button>
+
+    <p>入力したCSSがページのロード後に反映されます。</p>
+
+    <textarea class="materialize-textarea" data-settingid="custom-css" data-set="manual"
+      placeholder="CSSを入力"></textarea>
+
+    <button class="hs-button waves-effect waves-dark" style="width: 100%;" onclick="manualset('custom-css')">保存</button>
+    -->
+
+      <h3 class="waves-effect waves-dark">情報</h3>
+      <div class="md-item">
+        <span class="md-item-left">開発者 / 協力者</span>
+        <div class="md-item-right">
+          <button
+            class="waves-effect waves-dark"
+            style="padding: 0"
+            onclick="console.log('mdcmd:link(https://hisubway.online/articles/mddeveloper/)')"
+          >
+            開く
+          </button>
+        </div>
+      </div>
+      <div class="md-item">
+        <span class="md-item-left">参考</span>
+        <span class="md-item-right" style="white-space: nowrap">
+          <a href="https://github.com/totoraj930/TJDeck">TJDeck</a> /
+          <a href="https://github.com/mkizka/MTDeck">MTDeck</a>
+        </span>
+      </div>
+      <div class="md-item">
+        <span class="md-item-left">バージョン</span>
+        <span class="md-item-right">xx.x</span>
+      </div>
+    </div>
+
+    <div class="hs-modal"></div>
+
+    <script>
+      //materialize select
+      $(document).ready(function () {
+        $("select").formSelect();
+      });
+
+      //設定項目定義
+      let mdsettings = {};
+      $("[data-settingid]").each((i, e) => {
+        if ($(e).attr("type") == "checkbox") {
+          if ($(e).prop("checked")) {
+            mdsettings[$(e).data("settingid")] = "1";
+          } else {
+            mdsettings[$(e).data("settingid")] = "0";
+          }
+        } else {
+          mdsettings[$(e).data("settingid")] = $(e).val();
+        }
+      });
+
+      $("[data-settingid]").change(function () {
+        if ($(this).attr("data-set") == "manual") return;
+        if ($(this).attr("type") == "checkbox") {
+          if ($(this).prop("checked")) {
+            mdsettings[$(this).data("settingid")] = "1";
+          } else {
+            mdsettings[$(this).data("settingid")] = "0";
+          }
+        } else {
+          mdsettings[$(this).data("settingid")] = $(this)
+            .val()
+            .replace(/\n/g, "<n>");
+        }
+        console.log(`mdcmd:settingsjson(${JSON.stringify(mdsettings)})`);
+      });
+
+      function manualset(id) {
+        const element = $(`[data-settingid=${id}]`);
+        if ($(element).attr("type") == "checkbox") {
+          if ($(element).prop("checked")) {
+            mdsettings[$(element).data("settingid")] = "1";
+          } else {
+            mdsettings[$(element).data("settingid")] = "0";
+          }
+        } else {
+          mdsettings[$(element).data("settingid")] = $(element)
+            .val()
+            .replace(/\n/g, "<n>");
+        }
+        console.log(`mdcmd:settingsjson(${JSON.stringify(mdsettings)})`);
+      }
+
+      function importSettings(settings) {
+        try {
+          const settingsjson = JSON.parse(settings);
+          mdsettings = settingsjson;
+          Object.keys(settingsjson).forEach((key) => {
+            const element = $(`[data-settingid=${key}]`);
+            if ($(element).attr("type") == "checkbox") {
+              if (settingsjson[key] == 1) {
+                $(element).prop("checked", true);
+              } else {
+                $(element).prop("checked", false);
+              }
+            } else {
+              $(element).val(settingsjson[key].replace(/<n>/g, "\n"));
+            }
+            if ($(element).prop("tagName") == "SELECT") {
+              $(element).formSelect();
+            }
+            if ($(element).prop("tagName") == "TEXTAREA") {
+              M.textareaAutoResize($(element));
+            }
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      function closescreen() {
+        console.log("close");
+      }
+    </script>
+  </body>
+</html>
